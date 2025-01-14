@@ -7,13 +7,35 @@ from collections import Counter
 import json
 import re
 import numpy as np
-
+import platform
 
 # 한글 폰트 설정
-font_path = '/System/Library/Fonts/Supplemental/AppleGothic.ttf'  # 사용자 환경에 맞게 경로 수정
+# font_path = '/System/Library/Fonts/Supplemental/AppleGothic.ttf'  # 사용자 환경에 맞게 경로 수정
+# font_name = font_manager.FontProperties(fname=font_path).get_name()
+# rc('font', family=font_name)
+
+# 운영 체제에 따른 폰트 설정
+if platform.system() == 'Windows':  # Windows
+    font_path = 'C:/Windows/Fonts/malgun.ttf'  # Windows용 폰트 경로 (맑은 고딕)
+elif platform.system() == 'Darwin':  # macOS
+    font_path = '/System/Library/Fonts/Supplemental/AppleGothic.ttf'  # macOS용 폰트 경로
+elif platform.system() == 'Linux':  # Linux
+    font_path = '/usr/share/fonts/truetype/nanum/NanumGothic.ttf'  # Linux용 폰트 경로 (나눔 고딕)
+else:
+    font_path = None  # 기타 운영 체제
+
 font_name = font_manager.FontProperties(fname=font_path).get_name()
 rc('font', family=font_name)
 
+# 폰트 설정
+try:
+    if font_path and font_manager.FontProperties(fname=font_path).get_name():
+        font_name = font_manager.FontProperties(fname=font_path).get_name()
+        rc('font', family=font_name)
+    else:
+        raise FileNotFoundError("폰트 파일을 찾을 수 없습니다.")
+except Exception as e:
+    print(f"Warning: {e}. 기본 폰트를 사용합니다.")
 
 # 데이터 준비
 domestic_data = {
@@ -67,7 +89,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-st.header("항공 카테고리 소비자 불만 데이터 그롤링 및 분석 프로토타이핑 프로젝트")
+st.header("항공 카테고리 소비자 불만 데이터 크롤링 및 분석 프로토타이핑 프로젝트")
 
 # 사이드바 구성
 st.sidebar.title("탐색 메뉴")
@@ -88,7 +110,7 @@ st.sidebar.markdown(
 )
 
 # 이미지 추가
-st.image("airplane_image.png", caption="비행기", use_column_width=True)
+st.image("Project_1/img/airplane_image.png", caption="비행기", use_column_width=True)
 
 
 # 콘텐츠 섹션 0: 개요 및 팀원 섹션
@@ -129,9 +151,9 @@ st.markdown("""
 
 col1, col2 = st.columns(2)
 with col1:
-    st.image("항공사별_여객_국내선.png", caption="항공사별 국내선 여객(명)")
+    st.image("Project_1/img/항공사별_여객_국내선.png", caption="항공사별 국내선 여객(명)")
 with col2:
-    st.image("항공사별_여객_국제선.png", caption="항공사별 국제선 여객(명)")
+    st.image("Project_1/img/항공사별_여객_국제선.png", caption="항공사별 국제선 여객(명)")
 
 # 콘텐츠 섹션 2: 그래프 섹션
 # st.markdown('<div id="그래프-섹션" class="section"></div>', unsafe_allow_html=True)
@@ -154,7 +176,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # JSON 데이터 로드
-data_file = "6-11월.json"  # 같은 경로에 위치한 JSON 파일
+data_file = "Project_1/Data/6-11월.json"  # 같은 경로에 위치한 JSON 파일
 df = pd.read_json(data_file)
 
 # 데이터 필터링 및 계산
@@ -199,7 +221,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # JSON 데이터 로드
-top_data_file = "6-11월 4개 항공사.json"  # 동일 경로의 JSON 파일
+top_data_file = "Project_1/Data/6-11월 4개 항공사.json"  # 동일 경로의 JSON 파일
 df_top_data = pd.read_json(top_data_file)
 
 # 제목에서 단어 추출 및 빈도 계산
@@ -271,7 +293,7 @@ st.markdown('<div id="기업-별-민원-랭킹" class="section"></div>', unsafe_
 st.header("기업 별 민원 개수 랭킹")
 
 # JSON 파일 불러오기
-with open('6-11월 4개 항공사.json', 'r', encoding='utf-8') as json_file:
+with open('Project_1/Data/6-11월 4개 항공사.json', 'r', encoding='utf-8') as json_file:
     data = json.load(json_file)
 
 # 분석할 항공사 리스트
