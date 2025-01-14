@@ -1,0 +1,36 @@
+h2 { 
+    color: rgb(140, 0, 255);
+    text-align: center;
+}
+
+#first-heading{
+    color: orange;
+}
+
+.li-element {
+    color :aquamarine;
+}
+
+.li-element.first-li {
+    color :blueviolet;
+}
+
+a[href="https://ko.wikipedia.org/wiki/HTML"] {
+    color : green
+}
+
+ul b {
+    color: blue;
+}
+
+div > textarea {
+    color : brown;
+}
+
+i.and-operator {
+    color:blueviolet;
+}
+
+[type='submit'], [type='button']{
+    color:red;
+}
